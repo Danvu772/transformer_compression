@@ -1,0 +1,178 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{An Empirical Study of Transformers As A Learned Source Coder}
+
+\author{\IEEEauthorblockN{Dan Vu}
+\IEEEauthorblockA{\textit{Dept. of Electrical and Computer Engineering} \\
+\textit{University of Hawaii at Manoa}\\
+Honolulu, HI \\
+danvu@hawaii.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+We empirically investigate how much training data a learned source coder requires to outperform a universal source coder. Using a transformer trained on binary sequences as a learned probability estimator, we evaluate compression performance against the Laplace universal source coder across varying source distributions, training set sizes, and sequence lengths. Our results demonstrate that redundancy follows a $1/m$ decay with respect to the number training sequences $m$, consistent with theoretical predictions for learned coders. We demonstrate that a general transformer trained on all source parameters cannot beat universal source coding, while a specialized transformer requires surprisingly few training sequences to do so. We extend these experiments to binary Markov chains, demonstrating that transformer attention naturally exploits sequential structure that Laplace estimation cannot.
+\end{abstract}
+
+
+% -------------------------------------------------------
+\section{Introduction}
+% -------------------------------------------------------
+
+Data compression has traditionally relied on two classes of source coders. Fixed coders such as Huffman coding assume a known source distribution and achieve optimal performance only when that distribution is exactly matched. Universal source coders such as Lempel-Ziv \cite{lz77} and the Laplace estimator \cite{krichevsky} operate without knowledge of the source distribution, achieving redundancy that reduces with sequence length. Recently, learned source coders have emerged from advances in machine learning. These learned coders trained on data from a particular source distribution, then frozen and applied to new data of the same type.
+
+The central question motivating this work is: \textit{how much training data does a learned source coder require to beat a universal source coder?} Naive information-theoretic arguments suggest an exponential requirement \cite{hershkovits}, making learned coding seemingly infeasible. A more optimistic perspective, grounded in redundancy rather than entropy rate, yields a far more tractable bound \cite{madsen2020}.
+
+This paper provides the first empirical validation of this bound using a transformer-based learned coder. Our contributions are:
+\begin{itemize}
+    \item Empirical demonstration that a specialized transformer beats the Laplace universal coder, while a general transformer cannot
+    \item Empirical validation that redundancy decays as $1/m$ with training sequences, consistent with theoretical predictions
+    \item Extension to binary Markov chains, showing that transformer attention exploits sequential structure that Laplace cannot capture
+\end{itemize}
+
+% -------------------------------------------------------
+\section{Background}
+% -------------------------------------------------------
+
+\subsection{Entropy and Redundancy}
+
+For a binary source with parameter $\theta = p$, the entropy is
+\begin{equation}
+    H_\theta(X) = -p\log p - (1-p)\log(1-p)
+\end{equation}
+By Shannon's source coding theorem, $H_\theta(X)$ is the minimum achievable bits per symbol for any lossless coder with knowledge of $\theta$.
+
+For a coder $L$ applied to a sequence $x^l$ of length $l$, the redundancy with respect to source $\theta$ is defined as
+\begin{equation}
+    R_l(L, \theta) = \frac{1}{l}\mathbb{E}_\theta[L(X^l)] - H_\theta(X)
+\end{equation}
+Redundancy measures the excess bits per symbol beyond the entropy floor. A redundancy of zero is achievable only with exact knowledge of $\theta$.
+
+The connection between redundancy and estimation error is made precise through the KL divergence. If a coder assigns probabilities $\hat{p}$ to a source with true parameter $p$, then
+\begin{equation}
+    \mathbb{E}[-\log\hat{p}(X)] - H(X) = D(p\|\hat{p})
+\end{equation}
+where $D(p\|\hat{p}) = p\log\frac{p}{\hat{p}} + (1-p)\log\frac{1-p}{1-\hat{p}}$ is the KL divergence. Redundancy is therefore exactly the cost of using the wrong probability model.
+
+\subsection{Universal Source Coding}
+
+Since $\theta$ is typically unknown, the minimax redundancy is considered
+\begin{equation}
+    R^+_l = \min_L \sup_\theta R_l(L, \theta)
+\end{equation}
+This is the best worst-case redundancy achievable by any coder over all possible sources. For the IID binary case, this is achieved by the Laplace estimator $\hat{p}^{Lap}_i = \frac{k_i + 1}{i + 2}$, where $k_i$ is the count of ones seen in the first $i$ symbols. 
+
+% -------------------------------------------------------
+\section{System Architecture}
+% -------------------------------------------------------
+
+\subsection{Transformer as Learned Coder}
+
+We model the learned coder as a frozen function
+\begin{equation}
+    f_\phi: \{0,1\}^* \to [0,1]
+\end{equation}
+parameterized by transformer weights $\phi$, mapping a context sequence to a probability estimate for the next bit. Specifically
+\begin{equation}
+    \hat{p}_\phi(x_i = 1 \mid x_1^{i-1}) = \text{softmax}(W h_i)_1
+\end{equation}
+where $h_i$ is the transformer hidden state at position $i$, computed via causal self-attention over the full context $x_1^{i-1}$.
+
+\subsection{Training Objective}
+
+The transformer is trained to minimize cross-entropy loss over a fixed dataset $\mathcal{D}$ of $m$ sequences
+\begin{equation}
+    \phi^* = \arg\min_\phi \mathbb{E}_{x^l \sim \mathcal{D}}\left[-\sum_{i=1}^l \log \hat{p}_\phi(x_i \mid x_1^{i-1})\right]
+\end{equation}
+After training, $\phi$ is frozen. The model is not updated on test sequences --- this is the \textit{frozen coder} regime.
+
+A critical implementation requirement is that $\mathcal{D}$ must be a fixed, pre-generated set of exactly $m$ sequences. Online data generation would provide the model with effectively unlimited training data regardless of $m$, violating the theoretical setup where $m$ controls the total information available about $\theta$.
+
+\subsection{Swappable Probability Engine}
+
+The induced codelength under the transformer is
+\begin{equation}
+    L_\phi(x^l) = -\sum_{i=1}^l \log_2 \hat{p}_\phi(x_i \mid x_1^{i-1})
+\end{equation}
+and the bits per symbol is $\text{BPS} = \frac{1}{l}L_\phi(x^l)$.
+
+The key architectural insight is that both the Laplace and transformer coders share the same arithmetic coding engine. The only difference is the probability source:
+\begin{equation}
+    \hat{p}_i = \begin{cases} \frac{k_i + 1}{i + 2} & \text{Laplace} \\ f_\phi(x_1^{i-1}) & \text{Transformer} \end{cases}
+\end{equation}
+This modular design enables direct comparison --- same encoder, swappable probability model.
+
+\subsection{Model and Dataset}
+
+We use the gpt-nano architecture from minGPT \cite{mingpt} with vocabulary size 2, block size $l-1$, and approximately 0.11M parameters. The dataset for IID experiments is
+\begin{equation}
+    \mathcal{D}_{IID} = \{x^l_j\}_{j=1}^m, \quad x^l_j \overset{iid}{\sim} \text{Bernoulli}(p)^l
+\end{equation}
+For Markov experiments, sequences are generated from a symmetric binary Markov chain with stay probability $p_{stay}$, initialized from the stationary distribution.
+
+% -------------------------------------------------------
+\section{IID Experiments}
+% -------------------------------------------------------
+
+\subsection{Specialized vs. General Transformer}
+
+% Your results and discussion here
+
+\subsection{BPS vs. Sequence Length}
+
+% Your results and discussion here
+
+\subsection{Redundancy vs. Training Sequences}
+
+% Your results and discussion here
+
+\subsection{KL Divergence Validation}
+
+% Your results and discussion here
+
+% -------------------------------------------------------
+\section{Markov Chain Experiments}
+% -------------------------------------------------------
+
+\subsection{General Transformer on Markov Sequences}
+
+% Your results and discussion here
+
+\subsection{Specialized Markov Models}
+
+% Your results and discussion here
+
+% -------------------------------------------------------
+\section{Discussion}
+% -------------------------------------------------------
+
+% Your discussion here
+
+% -------------------------------------------------------
+\section{Conclusion}
+% -------------------------------------------------------
+
+% Your conclusion here
+
+% -------------------------------------------------------
+\section*{Acknowledgment}
+% -------------------------------------------------------
+
+The author thanks Prof. Anders Host-Madsen for advising this research.
+
+% -------------------------------------------------------
+
+\end{document}
