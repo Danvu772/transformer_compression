@@ -45,7 +45,7 @@
 \usepackage{multirow}
 
 %----------------------------------------------------------
-\title{\textbf{Transformer-Based Lossless Source Coding}}
+\title{\textbf{Learned Lossless Source Coding}}
 \author{Dan Vu \and Yixin Zhang \and Advisor: Prof.\ Anders H\o{}st-Madsen}
 \institute{Department of Electrical \& Computer Engineering,
            University of Hawai\textquoteleft{}i at M\=anoa}
@@ -70,7 +70,7 @@
   \end{column}
   \begin{column}{0.70\paperwidth}
     \centering
-    {\Huge\textbf{Transformer Based Universal Source Coding}}\\[0.9ex]
+    {\Huge\textbf{Transformer Based Lossless Source Coding}}\\[0.9ex]
     {\Large\textbf{Benchmarking Classical and Learned Compressors}}\\[0.5ex]
     {\large Dan Vu \quad Yixin Zhang \quad Advisor: Prof.\ Anders H\o{}st-Madsen }\\[0.3ex]
     {\normalsize Department of Electrical \& Computer Engineering,
@@ -139,7 +139,7 @@ excess codelength beyond the theoretical minimum.
 \textbf{Classical compression baselines:}
 \begin{itemize}
   \item \textbf{Laplace estimation:} $\hat{p} = (k+1)/(n+2)$; optimal for i.i.d.\ sources; assumes no temporal structure.
-  \item \textbf{Context Tree Weighting (CTW):} tree-based sequential estimator; provably optimal for finite-memory Markov sources; requires warmup. gabescahmberg, Github 
+  \item \textbf{Context Tree Weighting (CTW):} tree-based sequential estimator; requires warmup. Source code: gabescahmberg, Github 
 \end{itemize}
 
 \medskip
@@ -290,7 +290,7 @@ already there from the first token.
       \includegraphics[width=\linewidth]{figures/redundancy_vs_training.png}
     \end{center}
     {\small \textbf{Figure 4.} Redundancy vs.\ training sequences $m$
-    (IID, $p{=}0.5$, $N{=}100$) at around $10^2$, training samples, the transformer begins to demonstrate compression gains over Laplace estimation}
+    (IID, $p{=}0.3$, $N{=}499$) at around $10^2$, training samples, the transformer begins to demonstrate compression gains over Laplace estimation}
   \end{column}
 \end{columns}
 \end{block}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  1 MAY 2026 09:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  1 MAY 2026 10:42
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -880,13 +880,13 @@ Package rerunfilecheck Info: File `transformer_compression.out' has not changed.
 Here is how much of TeX's memory you used:
  24219 strings out of 473190
  462789 string characters out of 5715801
- 934299 words of memory out of 5000000
+ 933836 words of memory out of 5000000
  46972 multiletter control sequences out of 15000+600000
  574593 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,14n,123p,461b,1256s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on transformer_compression.pdf (1 page, 2120024 bytes).
+Output written on transformer_compression.pdf (1 page, 2119827 bytes).
 PDF statistics:
  101 PDF objects out of 1000 (max. 8388607)
  60 compressed objects within 1 object stream

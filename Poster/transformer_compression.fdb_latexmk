@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1777665102.79185 "/Users/danvu/Documents/Spring 2026/Compression basics/Poster/transformer_compression.tex" "transformer_compression.pdf" "transformer_compression" 1777665106.22149 0
-  "/Users/danvu/Documents/Spring 2026/Compression basics/Poster/transformer_compression.tex" 1777665102.58074 12357 4a34982297d413467774758db6d77993 ""
+["pdflatex"] 1777668145.78092 "/Users/danvu/Documents/Spring 2026/Compression basics/Poster/transformer_compression.tex" "transformer_compression.pdf" "transformer_compression" 1777668149.14366 0
+  "/Users/danvu/Documents/Spring 2026/Compression basics/Poster/transformer_compression.tex" 1777668145.6092 12308 82086b0955b892311712f1089b6967ba ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1246382020 908 2921f8a10601f252058503cc6570e581 ""
@@ -214,10 +214,10 @@
   "figures/iid_bps_per_p.png" 1777633192.98275 1213403 bb8c025604c8bdb71c6da4cb76ba9303 ""
   "figures/redundancy_vs_training.png" 1777631855.25652 202931 84ffaaf12796060c91f37144167a7ea6 ""
   "figures/uh_logo.png" 1777622506.99207 30817 a4c7e5b63570665f2a2e92740ec6ae89 ""
-  "transformer_compression.aux" 1777665106.15686 595 0c4a8a6d3317b7b34d7da3e30267e179 "pdflatex"
-  "transformer_compression.nav" 1777665106.15736 307 9e520c26371a1250ff9fc1fe87f9c655 "pdflatex"
-  "transformer_compression.out" 1777665103.31125 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "transformer_compression.tex" 1777665102.58074 12357 4a34982297d413467774758db6d77993 ""
+  "transformer_compression.aux" 1777668149.08393 595 0c4a8a6d3317b7b34d7da3e30267e179 "pdflatex"
+  "transformer_compression.nav" 1777668149.08452 307 9e520c26371a1250ff9fc1fe87f9c655 "pdflatex"
+  "transformer_compression.out" 1777668146.29101 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "transformer_compression.tex" 1777668145.6092 12308 82086b0955b892311712f1089b6967ba ""
   (generated)
   "transformer_compression.aux"
   "transformer_compression.log"
