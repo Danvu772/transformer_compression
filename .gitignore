@@ -20,6 +20,7 @@ __pycache__/
 *.snm
 *.bbl
 *.blg
+*.sty
 texput.log
 
 # macOS
@@ -28,8 +29,6 @@ texput.log
 # Claude
 .claude/
 
-# PDFs
-*.pdf
 
 # Readings and reflections
 Readings/
